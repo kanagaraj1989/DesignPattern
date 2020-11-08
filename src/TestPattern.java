@@ -2,6 +2,9 @@ import AbstractFactory.FactoryProducer;
 import Adaptor.CSVData;
 import Adaptor.CSVFileReader;
 import Adaptor.StockDetailFromCSVAdaptor;
+import Bridge.AuthService;
+import Bridge.IUserRepository;
+import Bridge.MongoUserRepository;
 import Builder.User;
 import Composite.Department;
 import Composite.Employee;
@@ -21,10 +24,11 @@ public class TestPattern {
         PROTOTYPE,
         COMPOSITE,
         ADAPTOR,
+        BRIDGE,
     }
     public static void main(String[] args) throws Exception {
         System.out.println("Application boot.");
-        var pattern = PatternType.ADAPTOR;
+        var pattern = PatternType.BRIDGE;
 
         switch (pattern) {
             case SINGLETON:
@@ -47,6 +51,9 @@ public class TestPattern {
                 break;
             case ADAPTOR:
                 TestPattern.testAdaptorPattern();
+                break;
+            case BRIDGE:
+                TestPattern.testBridgePattern();
                 break;
         }
     }
@@ -115,5 +122,12 @@ public class TestPattern {
         var adaptor = new StockDetailFromCSVAdaptor(fileReader);
         var stocks = adaptor.getHistoryData();
         stocks.forEach(stk -> System.out.println("Id="+ stk.id+ " Name="+ stk.name+ " Open="+ stk.open+ " Close="+ stk.close+ " High="+ stk.high));
+    }
+
+    private static void testBridgePattern() {
+        IUserRepository userRepository = new MongoUserRepository("mongo connection string");
+        var authService = new AuthService(userRepository);
+        var apiTok = authService.authenticate("test@gmail.com", "test123");
+        System.out.println("ApiToken=" + apiTok);
     }
 }

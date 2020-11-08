@@ -10,3 +10,4 @@ Covered Design:
 	PROTOTYPE, 
 	COMPOSITE, 
 	ADAPTOR,
+	BRIDGE
